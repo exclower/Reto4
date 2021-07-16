@@ -1,11 +1,9 @@
-package co.edu.utp.misiontic;
+package co.edu.utp.misiontic.main;
 
 import javax.swing.JOptionPane;
 
-/**
- * Hello world!
- *
- */
+import co.edu.utp.misiontic.logica.Perro;
+
 public class App 
 {
     public static void main( String[] args )
@@ -17,7 +15,7 @@ public class App
         //System.out.println(perro1.getNombre());
         Perro perro2 = new Perro("Sasha",3,"Siberiano");        
         //System.out.println(perro2.getNombre());        */
-        //JOptionPane.showMessageDialog(null, "Unidad 2","Misiontic",JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Unidad 2","Misiontic",JOptionPane.ERROR_MESSAGE);
         Perro perro3 = new Perro("Manchis",7,"Chandoso");        
         System.out.println(Perro.contadorPerros);
         Perro.ladrar();

@@ -1,4 +1,4 @@
-package co.edu.utp.misiontic;
+package co.edu.utp.misiontic.logica;
 
 public class Perro {
     //atributos

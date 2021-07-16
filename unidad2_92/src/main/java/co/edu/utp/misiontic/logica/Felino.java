@@ -1,6 +1,6 @@
-package co.edu.utp.misiontic;
+package co.edu.utp.misiontic.logica;
 
-public class Felino {
+public class Felino extends Mamifero{
     
     private int horas_sueño;
     private String horarioCaza;
@@ -27,5 +27,10 @@ public class Felino {
         System.out.println("Entran en modo sigilo");
         System.out.println("Saltan hacia su presa");
     }
+
+    @Override
+    public void reproducir() {        
+        System.out.println("El macho persiguiendo a la hembra");
+    }    
 
 }
