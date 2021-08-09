@@ -6,6 +6,10 @@
 package com.example;
 
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+
+import javafx.scene.control.ScrollBar;
+import javafx.scene.control.ScrollPane;
 
 /**
  *
@@ -156,16 +160,30 @@ public class EmpleadoGUI extends javax.swing.JFrame {
     }
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        EmpleadoDao empleadoDao = new EmpleadoDao();
+        ModeloDatos modelo = empleadoDao.consultar();
+        JTable tabla = new JTable(modelo);
+        //ScrollBar scroll = new ScrollBar(tabla);
+        JOptionPane.showMessageDialog(null, tabla);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+        String nombre = jTextField1.getText();
+        int edad = Integer.parseInt(jTextField2.getText());
+        String correo = jTextField3.getText();
+        Empleado empleado = new Empleado(nombre, correo, edad);
+        EmpleadoDao empleadoDao = new EmpleadoDao();
+        empleadoDao.actualizar(empleado);
+    }
 
     private void botonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEliminarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_botonEliminarActionPerformed
+        String nombre = jTextField1.getText();
+        int edad = Integer.parseInt(jTextField2.getText());
+        String correo = jTextField3.getText();
+        Empleado empleado = new Empleado(nombre, correo, edad);
+        EmpleadoDao empleadoDao = new EmpleadoDao();
+        empleadoDao.eliminar(empleado);
+    }
 
     /**
      * @param args the command line arguments
