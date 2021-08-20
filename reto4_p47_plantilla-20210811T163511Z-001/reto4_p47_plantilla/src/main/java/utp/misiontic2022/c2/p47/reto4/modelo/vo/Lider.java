@@ -4,7 +4,7 @@ public class Lider {
     private String Nombre;
     private String Primer_Apellido;
     private String Segundo_Apellido;
-    private String promedio;
+    private double salario;
 
     public Lider(){
 
@@ -31,6 +31,13 @@ public class Lider {
     public void setSegundo_Apellido(String segundo_Apellido) {
         Segundo_Apellido = segundo_Apellido;
     }
+    public double getSalario() {
+        return salario;
+    }
+    public void setSalario(double salario) {
+        this.salario = salario;
+    }
+    
 
 
 }

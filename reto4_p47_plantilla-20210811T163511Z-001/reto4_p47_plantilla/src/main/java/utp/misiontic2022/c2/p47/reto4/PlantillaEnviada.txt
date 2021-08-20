@@ -1,0 +1,266 @@
+/*
+ * Pueda usar esta plantilla para la carga del reto a iMaster
+ * Copie las clases de los paquetes Modelo, Vista, Controlador y Util
+ * No incluya los import de los archivos .java solo las clases
+ */
+// Importaciones necesarias en iMaster
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+// Util (No modificar)
+public class JDBCUtilities {
+    private static final String DATABASE_LOCATION = "ProyectosConstruccion.db";
+
+    public static Connection getConnection() throws SQLException {
+        String url = "jdbc:sqlite:"+DATABASE_LOCATION;
+
+        return DriverManager.getConnection(url);
+    }
+}
+
+// Remplace en adelante por las clases de sus archivos .java
+
+// Vista
+public class VistaRequerimientosReto4 {
+
+    public static final ControladorRequerimientos controlador = new ControladorRequerimientos();
+
+    public static void requerimiento1(){
+        System.out.println("Conocer el nombre, apellidos y salarios de los lideres cuyo segundo apellido sea 'Ortiz'");
+        System.out.println("Nombre Primer_apellido Segundo_apellido Salario");
+        try {
+            ArrayList<Lider> resultado = controlador.consultarRequerimiento1();
+            for (Lider lider:resultado){
+                System.out.print(lider.getNombre()+" ");
+                System.out.print(lider.getPrimer_Apellido()+" ");
+                System.out.print(lider.getSegundo_Apellido()+ " ");
+                System.out.println(lider.getSalario());
+            }
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+    }
+
+    public static void requerimiento2(){
+        System.out.println("Transformar y obtener el nombre de los lideres donde la"+ 
+        " primera letra sea en minúscula y las demás en mayúscula\nNombre");        
+        try {
+            ArrayList<Requerimiento_2> resultado = controlador.consultarRequerimiento2();
+            for (Requerimiento_2 lider:resultado){
+                System.out.println(lider.getNombreInvert()+" ");      
+            }
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+    }
+
+    public static void requerimiento3(){
+        System.out.println("Saber la suma de los salarios de todos los lideres por su ciudad de residencia\n"+
+        "Cargo Salario");
+        try {
+            ArrayList<Requerimiento_3> resultado = controlador.consultarRequerimiento3();
+            for (Requerimiento_3 lider:resultado){
+                System.out.print(lider.getCargo()+" ");
+                System.out.printf("%.6f %n", lider.getSumaSalarios());        
+            }
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+    }
+}
+
+// Controlador
+public class ControladorRequerimientos {
+    
+    private LiderDao dao = new LiderDao();
+    private Requerimiento_2Dao dao2 = new Requerimiento_2Dao();
+    private Requerimiento_3Dao dao3 = new Requerimiento_3Dao();
+    
+    public ControladorRequerimientos(){
+        this.dao = new LiderDao();
+    }
+    
+    public ArrayList<Lider> consultarRequerimiento1() throws SQLException {
+        return dao.requerimiento1();
+    }
+
+    public ArrayList<Requerimiento_2> consultarRequerimiento2() throws SQLException {
+        return dao2.requerimiento2();
+    }
+
+    public ArrayList<Requerimiento_3> consultarRequerimiento3() throws SQLException {
+        return dao3.requerimiento3();
+    }
+}
+
+// Modelo
+// VO
+public class Lider {
+    private String Nombre;
+    private String Primer_Apellido;
+    private String Segundo_Apellido;
+    private double salario;
+
+    public Lider(){
+
+    }
+
+    public String getNombre() {
+        return Nombre;
+    }
+
+    public void setNombre(String nombre) {
+        Nombre = nombre;
+    }
+
+    public String getPrimer_Apellido() {
+        return Primer_Apellido;
+    }
+    public void setPrimer_Apellido(String primer_Apellido) {
+        Primer_Apellido = primer_Apellido;
+    }
+
+    public String getSegundo_Apellido() {
+        return Segundo_Apellido;
+    }
+    public void setSegundo_Apellido(String segundo_Apellido) {
+        Segundo_Apellido = segundo_Apellido;
+    }
+    public double getSalario() {
+        return salario;
+    }
+    public void setSalario(double salario) {
+        this.salario = salario;
+    }
+    
+
+
+}
+
+public class Requerimiento_2 {
+    private String nombreInvert;
+
+    public String getNombreInvert() {
+        return nombreInvert;
+    }
+    public void setNombreInvert(String nombreInvert) {
+        this.nombreInvert = nombreInvert;
+    }
+}
+
+public class Requerimiento_3 {
+    private String cargo;
+    private double sumaSalarios;
+
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
+    }
+    public String getCargo() {
+        return cargo;
+    }
+    
+    public double getSumaSalarios() {
+        return sumaSalarios;
+    }
+    public void setSumaSalarios(double sumaSalarios) {
+        this.sumaSalarios = sumaSalarios;
+    }
+}
+
+// DAO
+public class LiderDao {
+
+    Connection conexion;
+
+    public LiderDao(){
+        try {
+            conexion = JDBCUtilities.getConnection();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public ArrayList<Lider> requerimiento1() throws SQLException {
+        ArrayList<Lider> lista = new ArrayList<>();
+        String sql = "select Nombre, Primer_Apellido, Segundo_Apellido,"
+        +" Salario from Lider"+ 
+        " where Primer_Apellido='Ortiz' or Segundo_Apellido='Ortiz'";
+        Statement pstm = conexion.createStatement();
+        ResultSet resultados = pstm.executeQuery(sql);
+        while(resultados.next()){
+            Lider lider = new Lider();
+            lider.setNombre(resultados.getString("Nombre"));
+            lider.setPrimer_Apellido(resultados.getString("Primer_Apellido"));
+            lider.setSegundo_Apellido(resultados.getString("Segundo_Apellido"));
+            lider.setSalario(resultados.getInt("Salario"));
+            lista.add(lider);
+        }
+        pstm.close();
+        resultados.close();
+        return lista;
+    }
+}
+
+public class Requerimiento_2Dao {
+    Connection conexion;
+
+    public Requerimiento_2Dao(){
+        try {
+            conexion = JDBCUtilities.getConnection();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public ArrayList<Requerimiento_2> requerimiento2() throws SQLException {
+        ArrayList<Requerimiento_2> lista = new ArrayList<>();
+        String sql = "select LOWER(SUBSTR(Nombre,1,1)) ||" +
+        " UPPER(SUBSTR(Nombre,2,LENGTH(Nombre))) 'nombreInvert' from Lider l";
+        Statement stm = conexion.createStatement();
+        ResultSet resultados = stm.executeQuery(sql);
+        while(resultados.next()){
+            Requerimiento_2 listaInvert = new Requerimiento_2();
+            listaInvert.setNombreInvert(resultados.getString("nombreInvert"));
+            lista.add(listaInvert);
+        }
+        stm.close();
+        resultados.close();
+        return lista;
+    }
+}
+
+public class Requerimiento_3Dao {
+    Connection conexion;
+
+    public Requerimiento_3Dao(){
+        try {
+            conexion = JDBCUtilities.getConnection();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public ArrayList<Requerimiento_3> requerimiento3() throws SQLException {
+        ArrayList<Requerimiento_3> lista = new ArrayList<>();
+        String sql = "select cargo, avg(Salario) 'sum' from Lider l group"+
+        " by Cargo having avg(salario)>500000 order by Cargo; ";
+        Statement stm = conexion.createStatement();
+        ResultSet resultados = stm.executeQuery(sql);
+        while(resultados.next()){
+            Requerimiento_3 listaInvert = new Requerimiento_3();
+            listaInvert.setCargo(resultados.getString("Cargo"));
+            listaInvert.setSumaSalarios(resultados.getDouble("sum"));
+            lista.add(listaInvert);
+        }
+        stm.close();
+        resultados.close();
+        return lista;
+    }
+}

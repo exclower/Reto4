@@ -25,16 +25,21 @@ public class LiderDao {
 
     public ArrayList<Lider> requerimiento1() throws SQLException {
         ArrayList<Lider> lista = new ArrayList<>();
-        String sql = "select Nombre, Primer_Apellido, Segundo_Apellido from Lider where Primer_Apellido='Perez' or Segundo_Apellido='Perez'";
+        String sql = "select Nombre, Primer_Apellido, Segundo_Apellido,"
+        +" Salario from Lider"+ 
+        " where Primer_Apellido='Ortiz' or Segundo_Apellido='Ortiz'";
         Statement pstm = conexion.createStatement();
         ResultSet resultados = pstm.executeQuery(sql);
         while(resultados.next()){
             Lider lider = new Lider();
-            lider.setNombre(resultados.getString(1));
-            lider.setPrimer_Apellido(resultados.getString(2));
-            lider.setSegundo_Apellido(resultados.getString(3));
+            lider.setNombre(resultados.getString("Nombre"));
+            lider.setPrimer_Apellido(resultados.getString("Primer_Apellido"));
+            lider.setSegundo_Apellido(resultados.getString("Segundo_Apellido"));
+            lider.setSalario(resultados.getDouble("Salario"));
             lista.add(lider);
         }
+        pstm.close();
+        resultados.close();
         return lista;
     }
 }
